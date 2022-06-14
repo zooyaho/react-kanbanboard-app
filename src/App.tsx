@@ -1,7 +1,7 @@
 import React from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import {DragDropContext} from 'react-beautiful-dnd';
+import { useRecoilState } from 'recoil';
 import { createGlobalStyle } from 'styled-components';
-import { hourSelector, minutesState } from './atom';
 
 // Reset CSS
 const GlobalStyle = createGlobalStyle`
@@ -67,36 +67,15 @@ a {
 `;
 
 function App() {
-  const [minutes, setMinutes] = useRecoilState(minutesState);
-  // selector또한 state와 같이 배열로 받음.
-  const [hours, setHours] = useRecoilState(hourSelector);
-  console.log(hours);
 
-  const minuteChageHandler = (event: React.FormEvent<HTMLInputElement>) => {
-    const { currentTarget: { value } } = event;
-    setMinutes(+value);
-  }
+  const dragEndHandler = ()=>{
 
-  const hourChageHandler = (event:React.FormEvent<HTMLInputElement>)=>{
-    setHours(+event.currentTarget.value);
   }
 
   return (
-    <>
-      <GlobalStyle />
-      <input 
-        value={minutes} 
-        onChange={minuteChageHandler} 
-        type="number" 
-        placeholder='minutes' 
-      />
-      <input 
-        value={hours} 
-        onChange={hourChageHandler}
-        type="number" 
-        placeholder='hours' 
-      />
-    </>
+    <DragDropContext onDragEnd={dragEndHandler}>
+
+    </DragDropContext>
   );
 }
 
