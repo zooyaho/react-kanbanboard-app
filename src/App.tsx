@@ -96,7 +96,7 @@ const Card = styled.div`
   padding: 10px 10px;
   background-color: ${(props) => props.theme.cardColor};
 `;
-
+const toDos = ["a", "b", "c", "d", "e", "f"];
 function App() {
 
   const dragEndHandler = () => {
@@ -110,18 +110,21 @@ function App() {
         <Wrapper>
           <Boards>
             <Droppable droppableId="one">
-              {(provied) =>
+              {(provied) => (
                 <Board ref={provied.innerRef} {...provied.droppableProps}>
-                  <Draggable draggableId="first" index={0}>
-                    {(provied) => (
-                      <Card ref={provied.innerRef} {...provied.draggableProps} >
-                        <span {...provied.dragHandleProps}>🔥</span>
-                        One
-                      </Card>
-                    )}
-                  </Draggable>
+                  {toDos.map((toDo, index) => (
+                    <Draggable draggableId={toDo} index={index}>
+                      {(provied) => (
+                        <Card ref={provied.innerRef} {...provied.dragHandleProps} {...provied.draggableProps} >
+                          {toDo}
+                        </Card>
+                      )}
+                    </Draggable>
+                  ))}
+                  {provied.placeholder}
+                  {/* placeholder : droppable이 끝날때 두는 무언가를 가리킴 -> 사이즈가 이상하게 변하는 것을 방지함. */}
                 </Board>
-              }
+              )}
             </Droppable>
           </Boards>
         </Wrapper>
