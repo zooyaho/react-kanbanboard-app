@@ -1,7 +1,6 @@
 import React from 'react';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
-import { useRecoilState } from 'recoil';
-import { createGlobalStyle } from 'styled-components';
+import styled, { createGlobalStyle } from 'styled-components';
 
 // Reset CSS
 const GlobalStyle = createGlobalStyle`
@@ -57,13 +56,45 @@ table {
 }
 body {
   font-family: 'Roboto Mono', monospace;
-  background-color: white;
+  background-color: ${(props) => props.theme.bgColor};
   color:black;
+  line-height: 1.2;
 }
 a {
   text-decoration:none;
   color: inherit;
 }
+`;
+
+const Wrapper = styled.div`
+  display: flex;
+  max-width: 480px;
+  width: 100%;
+  margin: 0 auto;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+`;
+
+const Boards = styled.div`
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(1, 1fr);
+`;
+
+const Board = styled.div`
+  padding: 20px 10px;
+  padding-top: 30px;
+  background-color: ${(props) => props.theme.boardColor};
+  border-radius: 5px;
+  min-height: 200px;
+`;
+
+const Card = styled.div`
+  border-radius: 5px;
+  margin-bottom: 5px;
+  padding: 10px 10px;
+  background-color: ${(props) => props.theme.cardColor};
 `;
 
 function App() {
@@ -76,30 +107,24 @@ function App() {
     <>
       <GlobalStyle />
       <DragDropContext onDragEnd={dragEndHandler}>
-        <div>
-          <Droppable droppableId="one">
-            {(provied) =>
-              <ul ref={provied.innerRef} {...provied.droppableProps}>
-                <Draggable draggableId="first" index={0}>
-                  {(provied) => (
-                    <li ref={provied.innerRef} {...provied.draggableProps} >
-                      <span {...provied.dragHandleProps}>🔥</span>
-                      One
-                    </li>
-                  )}
-                </Draggable>
-                <Draggable draggableId="second" index={1}>
-                {(provied) => (
-                    <li ref={provied.innerRef} {...provied.draggableProps}>
-                      <span {...provied.dragHandleProps}>🔥</span>
-                      Two
-                    </li>
-                  )}
-                </Draggable>
-              </ul>
-            }
-          </Droppable>
-        </div>
+        <Wrapper>
+          <Boards>
+            <Droppable droppableId="one">
+              {(provied) =>
+                <Board ref={provied.innerRef} {...provied.droppableProps}>
+                  <Draggable draggableId="first" index={0}>
+                    {(provied) => (
+                      <Card ref={provied.innerRef} {...provied.draggableProps} >
+                        <span {...provied.dragHandleProps}>🔥</span>
+                        One
+                      </Card>
+                    )}
+                  </Draggable>
+                </Board>
+              }
+            </Droppable>
+          </Boards>
+        </Wrapper>
       </DragDropContext>
     </>
   );
