@@ -1,5 +1,5 @@
 import React from 'react';
-import {DragDropContext} from 'react-beautiful-dnd';
+import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 import { useRecoilState } from 'recoil';
 import { createGlobalStyle } from 'styled-components';
 
@@ -68,14 +68,40 @@ a {
 
 function App() {
 
-  const dragEndHandler = ()=>{
+  const dragEndHandler = () => {
 
   }
 
   return (
-    <DragDropContext onDragEnd={dragEndHandler}>
-
-    </DragDropContext>
+    <>
+      <GlobalStyle />
+      <DragDropContext onDragEnd={dragEndHandler}>
+        <div>
+          <Droppable droppableId="one">
+            {(provied) =>
+              <ul ref={provied.innerRef} {...provied.droppableProps}>
+                <Draggable draggableId="first" index={0}>
+                  {(provied) => (
+                    <li ref={provied.innerRef} {...provied.draggableProps} >
+                      <span {...provied.dragHandleProps}>🔥</span>
+                      One
+                    </li>
+                  )}
+                </Draggable>
+                <Draggable draggableId="second" index={1}>
+                {(provied) => (
+                    <li ref={provied.innerRef} {...provied.draggableProps}>
+                      <span {...provied.dragHandleProps}>🔥</span>
+                      Two
+                    </li>
+                  )}
+                </Draggable>
+              </ul>
+            }
+          </Droppable>
+        </div>
+      </DragDropContext>
+    </>
   );
 }
 
