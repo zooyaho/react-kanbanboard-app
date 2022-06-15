@@ -3,6 +3,7 @@ import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautif
 import { useRecoilState } from 'recoil';
 import styled, { createGlobalStyle } from 'styled-components';
 import { toDoState } from './atom';
+import DraggableCard from './components/DraggableCard';
 
 // Reset CSS
 const GlobalStyle = createGlobalStyle`
@@ -92,12 +93,7 @@ const Board = styled.div`
   min-height: 200px;
 `;
 
-const Card = styled.div`
-  border-radius: 5px;
-  margin-bottom: 5px;
-  padding: 10px 10px;
-  background-color: ${(props) => props.theme.cardColor};
-`;
+
 function App() {
   const [toDos, setToDos] = useRecoilState(toDoState);
   // ["a", "b", "c", "d", "e", "f"]
@@ -125,14 +121,7 @@ function App() {
               {(provied) => (
                 <Board ref={provied.innerRef} {...provied.droppableProps}>
                   {toDos.map((toDo, index) => (
-                    // 이 라이브러리에서 key와 draggableId의 값이 무조건 같아야 함.
-                    <Draggable key={toDo} draggableId={toDo} index={index}>
-                      {(provied) => (
-                        <Card ref={provied.innerRef} {...provied.dragHandleProps} {...provied.draggableProps} >
-                          {toDo}
-                        </Card>
-                      )}
-                    </Draggable>
+                    <DraggableCard key={toDo} toDo={toDo} index={index} />
                   ))}
                   {provied.placeholder}
                   {/* placeholder : droppable이 끝날때 두는 무언가를 가리킴 -> 사이즈가 이상하게 변하는 것을 방지함. */}
