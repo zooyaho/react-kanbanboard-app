@@ -2,6 +2,7 @@ import { Droppable } from "react-beautiful-dnd";
 import styled from "styled-components";
 import DraggableCard from "./DraggableCard";
 
+// 배경색 변화로 사용자가 보드에 도착하는지 떠나가는지 보여줌
 const Wrapper = styled.div`
   width: 300px;
   padding: 20px 10px;
@@ -20,28 +21,41 @@ const Title = styled.h2`
   font-size: 18px;
 `;
 
-const Area = styled.div`
-  background-color: pink;
+interface IAreaProps {
+  isDraggingOver: boolean;
+  isDraggingFromThis: boolean;
+}
+
+const Area = styled.div<IAreaProps>`
+  // 유저가 위로 드래그해서 들어오고 있는지에 따른 배경색 변경
+  // 드래그해서 떠나면 red 기본 배경 transparent
+  background-color: ${(props) => props.isDraggingOver ? "pink" : props.isDraggingFromThis ? "red": ""};
   // Area만 grow를 지정해서 남은 여백을 모두 차지하게 함.
   flex-grow: 1;
+  transition: background-color 0.3s ease-in-out
 `;
 
 interface IBoard {
-  toDos:string[];
+  toDos: string[];
   boardId: string;
 }
 
-const Board = ({toDos, boardId}:IBoard) => {
+const Board = ({ toDos, boardId }: IBoard) => {
   return (
     <Wrapper>
       <Title>{boardId}</Title>
       <Droppable droppableId={boardId}>
-        {(magic) => (
-          <Area ref={magic.innerRef} {...magic.droppableProps}>
+        {(provied, snapshot) => (
+          <Area
+            isDraggingOver={snapshot.isDraggingOver}
+            isDraggingFromThis={Boolean(snapshot.draggingFromThisWith)}
+            ref={provied.innerRef}
+            {...provied.droppableProps}
+          >
             {toDos.map((toDo, index) => (
               <DraggableCard key={toDo} index={index} toDo={toDo} />
             ))}
-            {magic.placeholder}
+            {provied.placeholder}
             {/* placeholder : droppable이 끝날때 두는 무언가를 가리킴 -> 사이즈가 이상하게 변하는 것을 방지함. */}
           </Area>
         )}
