@@ -9,9 +9,9 @@ interface ICard {
 const Card = styled.div<ICard>`
   border-radius: 5px;
   margin-bottom: 5px;
-  padding: 10px 10px;
-  // dragging중일 때의 배경색은 tomato
-  background-color: ${(props) => props.isDragging ? "tomato" : props.theme.cardColor};
+  padding: 5px 10px;
+  // dragging중일 때의 배경색은 진한핑크색
+  background-color: ${(props) => props.isDragging ? "#f8a5c2" : props.theme.cardColor};
   box-shadow: ${props=> props.isDragging ? "0px 2px 5px rgba(0,0,0,0.3)": "none"}
 `;
 

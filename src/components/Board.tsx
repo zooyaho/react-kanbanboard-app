@@ -5,8 +5,7 @@ import DraggableCard from "./DraggableCard";
 // 배경색 변화로 사용자가 보드에 도착하는지 떠나가는지 보여줌
 const Wrapper = styled.div`
   width: 300px;
-  padding: 20px 10px;
-  padding-top: 10px;
+  padding-top: 20px;
   background-color: ${(props) => props.theme.boardColor};
   border-radius: 5px;
   min-height: 300px;
@@ -29,10 +28,16 @@ interface IAreaProps {
 const Area = styled.div<IAreaProps>`
   // 유저가 위로 드래그해서 들어오고 있는지에 따른 배경색 변경
   // 드래그해서 떠나면 red 기본 배경 transparent
-  background-color: ${(props) => props.isDraggingOver ? "pink" : props.isDraggingFromThis ? "red": ""};
+  background-color: ${(props) => 
+    props.isDraggingOver
+    ? "#dfe6e9"
+    : props.isDraggingFromThis
+    ? "#b2bec3"
+    : "transparent"};
   // Area만 grow를 지정해서 남은 여백을 모두 차지하게 함.
   flex-grow: 1;
-  transition: background-color 0.3s ease-in-out
+  transition: background-color 0.3s ease-in-out;
+  padding: 10px 20px;
 `;
 
 interface IBoard {
