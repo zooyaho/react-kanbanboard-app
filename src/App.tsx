@@ -123,7 +123,7 @@ function App() {
         // source, destination 보드에 각각 요소를 삭제, 추가
         sourceBoardCopy.splice(source.index,1);
         destinationBoardCopy.splice(destination?.index,0,draggableId);
-        
+
         return{
           ...allBoards,
           [source.droppableId]: sourceBoardCopy,
@@ -131,7 +131,6 @@ function App() {
         };
       });
     }
-
   }
 
   return (
