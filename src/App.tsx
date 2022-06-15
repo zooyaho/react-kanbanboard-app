@@ -71,8 +71,7 @@ a {
 
 const Wrapper = styled.div`
   display: flex;
-  max-width: 680px;
-  width: 100%;
+  width: 100vw;
   margin: 0 auto;
   justify-content: center;
   align-items: center;
@@ -80,9 +79,10 @@ const Wrapper = styled.div`
 `;
 
 const Boards = styled.div`
-  display: grid;
   width: 100%;
-  grid-template-columns: repeat(3, 1fr);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
   gap: 10px;
 `;
 
@@ -92,9 +92,9 @@ function App() {
   console.log(toDos);
 
   /* 드래그가 끝났을때 실행되는 함수 */
-  const dragEndHandler = ({draggableId, destination, source}:DropResult) => {
+  const dragEndHandler = ({ draggableId, destination, source }: DropResult) => {
     // destination이 없을 경우 > 제자리에 드롭한 경우
-    if(!destination) return;
+    if (!destination) return;
 
     // setToDos((curToDo)=>{
     //   const copyToDos = [...curToDo];
@@ -110,8 +110,8 @@ function App() {
       <DragDropContext onDragEnd={dragEndHandler}>
         <Wrapper>
           <Boards>
-            {Object.keys(toDos).map((boardId)=> (
-              <Board key={boardId} toDos={toDos[boardId]} boardId={boardId}/>
+            {Object.keys(toDos).map((boardId) => (
+              <Board key={boardId} toDos={toDos[boardId]} boardId={boardId} />
             ))}
           </Boards>
         </Wrapper>
