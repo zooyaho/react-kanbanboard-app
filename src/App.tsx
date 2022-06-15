@@ -1,4 +1,3 @@
-import React from 'react';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 import { useRecoilState } from 'recoil';
 import styled, { createGlobalStyle } from 'styled-components';
@@ -92,16 +91,27 @@ function App() {
   console.log(toDos);
 
   /* 드래그가 끝났을때 실행되는 함수 */
-  const dragEndHandler = ({ draggableId, destination, source }: DropResult) => {
+  const dragEndHandler = (info: DropResult) => {
+    const { draggableId, destination, source } = info;
+
     // destination이 없을 경우 > 제자리에 드롭한 경우
     if (!destination) return;
 
-    // setToDos((curToDo)=>{
-    //   const copyToDos = [...curToDo];
-    //   copyToDos.splice(source.index,1); // 드롭한 요소 삭제
-    //   copyToDos.splice(destination?.index,0,draggableId) // 드롭한 지점에 요소 추가
-    //   return copyToDos;
-    // });
+    // 1. source보드가 destination보드와 같은건지 확인
+    if(destination?.droppableId === source.droppableId){
+      // source보드와 destination보드가 같을 경우
+      setToDos((allBoards)=>{
+        const boardCopy = [...allBoards[source.droppableId]]; // 드래그한 보드 복사
+        boardCopy.splice(source.index,1); // 드래그한 요소 삭제
+        boardCopy.splice(destination?.index,0,draggableId) // 드롭한 지점에 요소 추가
+
+        // 바뀐 보드만 수정되어서 넣음.
+        return {
+          ...allBoards,
+          [source.droppableId]: boardCopy
+        };
+      });
+    }
   }
 
   return (
