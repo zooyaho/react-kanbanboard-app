@@ -91,18 +91,19 @@ function App() {
   /* 드래그가 끝났을때 실행되는 함수 */
   const dragEndHandler = (info: DropResult) => {
     const { draggableId, destination, source } = info;
-    // draggableId는 우리가 움직인 card의 id -> number
+    // draggableId는 우리가 움직인 card의 id -> 1부터 시작하는 string타입임.
 
     // destination이 없을 경우 > 제자리에 드롭한 경우
     if (!destination) return;
 
     // 1. source보드와 destination보드가 같을 경우
-    if(destination?.droppableId === source.droppableId){
+    if (destination?.droppableId === source.droppableId) {
       // same board movement
-      setToDos((allBoards)=>{
+      setToDos((allBoards) => {
         const boardCopy = [...allBoards[source.droppableId]]; // 드래그한 보드 복사
-        boardCopy.splice(source.index,1); // 드래그한 요소 삭제
-        boardCopy.splice(destination?.index,0,draggableId) // 드롭한 지점에 요소 추가
+        const taskObj = boardCopy[source.index]; // 해당 obj의 참조값을 얻은 후 사용
+        boardCopy.splice(source.index, 1); // 드래그한 요소 삭제
+        boardCopy.splice(destination?.index, 0, taskObj) // 드롭한 지점에 요소 추가
 
         // 바뀐 보드만 수정되어서 넣음.
         return {
@@ -113,20 +114,21 @@ function App() {
     }
 
     // 2. source보드가 destination보드와 다를 경우
-    if(destination?.droppableId !== source.droppableId){
+    if (destination?.droppableId !== source.droppableId) {
       // cross board movement
-      setToDos((allBoards)=>{
+      setToDos((allBoards) => {
         // source, destination 보드 복사
-        const sourceBoardCopy = [...allBoards[source.droppableId]]
-        const destinationBoardCopy = [...allBoards[destination.droppableId]]
+        const sourceBoardCopy = [...allBoards[source.droppableId]];
+        const destinationBoardCopy = [...allBoards[destination.droppableId]];
+        const taskObj = sourceBoardCopy[source.index];
         // source, destination 보드에 각각 요소를 삭제, 추가
-        sourceBoardCopy.splice(source.index,1);
-        destinationBoardCopy.splice(destination?.index,0,draggableId);
+        sourceBoardCopy.splice(source.index, 1);
+        destinationBoardCopy.splice(destination?.index, 0, taskObj);
 
-        return{
+        return {
           ...allBoards,
           [source.droppableId]: sourceBoardCopy,
-          [destination?.droppableId]:destinationBoardCopy
+          [destination?.droppableId]: destinationBoardCopy
         };
       });
     }
