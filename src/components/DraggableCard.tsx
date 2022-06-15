@@ -16,15 +16,15 @@ const Card = styled.div<ICard>`
 `;
 
 interface IDraggableCardProps {
-  toDo: string,
+  toDoId: number,
+  toDoText: string,
   index: number
 }
 
-const DraggableCard = ({toDo, index}:IDraggableCardProps) => {
-  console.log(toDo, "재 렌더링");
+const DraggableCard = ({toDoId, toDoText, index}:IDraggableCardProps) => {
   return (
     // 이 라이브러리에서 key와 draggableId의 값이 무조건 같아야 함.
-    <Draggable draggableId={toDo} index={index}>
+    <Draggable draggableId={toDoId + ""} index={index}>
       {(provied, snapshot) => (
         <Card 
           isDragging={snapshot.isDragging}
@@ -32,7 +32,7 @@ const DraggableCard = ({toDo, index}:IDraggableCardProps) => {
           {...provied.dragHandleProps} 
           {...provied.draggableProps} 
         >
-          {toDo}
+          {toDoText}
         </Card>
       )}
     </Draggable>

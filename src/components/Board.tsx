@@ -2,6 +2,7 @@ import { Droppable } from "react-beautiful-dnd";
 import styled from "styled-components";
 import DraggableCard from "./DraggableCard";
 import { useForm } from "react-hook-form";
+import { IToDo } from "../atom";
 
 
 // 배경색 변화로 사용자가 보드에 도착하는지 떠나가는지 보여줌
@@ -45,12 +46,17 @@ const Area = styled.div<IAreaProps>`
 const Form = styled.form`
   width: 100%;
   input {
+    font-size: 16px;
     width: 100%;
+  }
+  span {
+    font-size: 12px;
+    font-weight: bold;
   }
 `;
 
-interface IBoard {
-  toDos: string[];
+interface IBoardProps {
+  toDos: IToDo[];
   boardId: string;
 }
 
@@ -58,9 +64,9 @@ interface IForm {
   toDo: string;
 }
 
-const Board = ({ toDos, boardId}: IBoard) => {
-  const {register, handleSubmit, setValue } = useForm<IForm>();
-  const handleValid = (data: IForm)=>{
+const Board = ({ toDos, boardId}: IBoardProps) => {
+  const {register, handleSubmit, setValue,formState: { errors }} = useForm<IForm>();
+  const handleValid = ({toDo}: IForm)=>{
     setValue("toDo","")
   }
 
@@ -71,8 +77,8 @@ const Board = ({ toDos, boardId}: IBoard) => {
         <input 
           {...register("toDo", { required:true, minLength: {value:5, message:"short!!"}})} 
           placeholder={`Add task on ${boardId}`} />
-        {/* <span style={{color:"#c44569"}}>{errors?.toDo.message}</span> */}
-        <button>click me</button>
+        <span style={{color:"#c44569"}}>{errors?.toDo?.message}</span>
+        {/* <button>click me</button> */}
       </Form>
       <Droppable droppableId={boardId}>
         {(provied, snapshot) => (
@@ -83,7 +89,7 @@ const Board = ({ toDos, boardId}: IBoard) => {
             {...provied.droppableProps}
           >
             {toDos.map((toDo, index) => (
-              <DraggableCard key={toDo} index={index} toDo={toDo} />
+              <DraggableCard key={toDo.id} index={index} toDoId={toDo.id} toDoText={toDo.text} />
             ))}
             {provied.placeholder}
             {/* placeholder : droppable이 끝날때 두는 무언가를 가리킴 -> 사이즈가 이상하게 변하는 것을 방지함. */}

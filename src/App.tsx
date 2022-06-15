@@ -87,12 +87,11 @@ const Boards = styled.div`
 
 function App() {
   const [toDos, setToDos] = useRecoilState(toDoState);
-  // ["a", "b", "c", "d", "e", "f"]
-  console.log(toDos);
 
   /* 드래그가 끝났을때 실행되는 함수 */
   const dragEndHandler = (info: DropResult) => {
     const { draggableId, destination, source } = info;
+    // draggableId는 우리가 움직인 card의 id -> number
 
     // destination이 없을 경우 > 제자리에 드롭한 경우
     if (!destination) return;
