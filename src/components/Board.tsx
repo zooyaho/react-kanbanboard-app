@@ -1,6 +1,8 @@
 import { Droppable } from "react-beautiful-dnd";
 import styled from "styled-components";
 import DraggableCard from "./DraggableCard";
+import { useForm } from "react-hook-form";
+
 
 // 배경색 변화로 사용자가 보드에 도착하는지 떠나가는지 보여줌
 const Wrapper = styled.div`
@@ -40,15 +42,38 @@ const Area = styled.div<IAreaProps>`
   padding: 10px 20px;
 `;
 
+const Form = styled.form`
+  width: 100%;
+  input {
+    width: 100%;
+  }
+`;
+
 interface IBoard {
   toDos: string[];
   boardId: string;
 }
 
-const Board = ({ toDos, boardId }: IBoard) => {
+interface IForm {
+  toDo: string;
+}
+
+const Board = ({ toDos, boardId}: IBoard) => {
+  const {register, handleSubmit, setValue } = useForm<IForm>();
+  const handleValid = (data: IForm)=>{
+    setValue("toDo","")
+  }
+
   return (
     <Wrapper>
       <Title>{boardId}</Title>
+      <Form onSubmit={handleSubmit(handleValid)}>
+        <input 
+          {...register("toDo", { required:true, minLength: {value:5, message:"short!!"}})} 
+          placeholder={`Add task on ${boardId}`} />
+        {/* <span style={{color:"#c44569"}}>{errors?.toDo.message}</span> */}
+        <button>click me</button>
+      </Form>
       <Droppable droppableId={boardId}>
         {(provied, snapshot) => (
           <Area
