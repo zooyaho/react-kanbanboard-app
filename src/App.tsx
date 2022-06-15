@@ -97,9 +97,9 @@ function App() {
     // destination이 없을 경우 > 제자리에 드롭한 경우
     if (!destination) return;
 
-    // 1. source보드가 destination보드와 같은건지 확인
+    // 1. source보드와 destination보드가 같을 경우
     if(destination?.droppableId === source.droppableId){
-      // source보드와 destination보드가 같을 경우
+      // same board movement
       setToDos((allBoards)=>{
         const boardCopy = [...allBoards[source.droppableId]]; // 드래그한 보드 복사
         boardCopy.splice(source.index,1); // 드래그한 요소 삭제
@@ -112,6 +112,26 @@ function App() {
         };
       });
     }
+
+    // 2. source보드가 destination보드와 다를 경우
+    if(destination?.droppableId !== source.droppableId){
+      // cross board movement
+      setToDos((allBoards)=>{
+        // source, destination 보드 복사
+        const sourceBoardCopy = [...allBoards[source.droppableId]]
+        const destinationBoardCopy = [...allBoards[destination.droppableId]]
+        // source, destination 보드에 각각 요소를 삭제, 추가
+        sourceBoardCopy.splice(source.index,1);
+        destinationBoardCopy.splice(destination?.index,0,draggableId);
+        
+        return{
+          ...allBoards,
+          [source.droppableId]: sourceBoardCopy,
+          [destination?.droppableId]:destinationBoardCopy
+        };
+      });
+    }
+
   }
 
   return (
