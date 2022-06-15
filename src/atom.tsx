@@ -6,7 +6,7 @@ export interface IToDo {
 }
 
 // typescript는 default에 작성한 것만 허용하기 때문에 toDoState의 interface생성 
-interface IToDoState {
+export interface IToDoState {
   [key:string] : IToDo[];
 }
 /* IToDoState 데이터 형식

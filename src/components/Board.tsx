@@ -2,7 +2,8 @@ import { Droppable } from "react-beautiful-dnd";
 import styled from "styled-components";
 import DraggableCard from "./DraggableCard";
 import { useForm } from "react-hook-form";
-import { IToDo } from "../atom";
+import { IToDo, toDoState } from "../atom";
+import { useSetRecoilState } from "recoil";
 
 
 // 배경색 변화로 사용자가 보드에 도착하는지 떠나가는지 보여줌
@@ -64,9 +65,22 @@ interface IForm {
   toDo: string;
 }
 
-const Board = ({ toDos, boardId}: IBoardProps) => {
+// 인자 형식 toDos: "To Do"보드에 해당하는 데이터, boardId: "To Do"
+const Board = ({ toDos, boardId }: IBoardProps) => {
+  const setToDos = useSetRecoilState(toDoState);
   const {register, handleSubmit, setValue,formState: { errors }} = useForm<IForm>();
+
   const handleValid = ({toDo}: IForm)=>{
+    const newObj = {
+      id: Date.now(),
+      text: toDo
+    }
+    setToDos((allBoards)=>{
+      return { 
+        ...allBoards, 
+        [boardId]:[...allBoards[boardId], newObj]
+      }
+    });
     setValue("toDo","")
   }
 
